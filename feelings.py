@@ -27,7 +27,7 @@ def findSlope():
             days.append(int(i[0]) * 1.0)
             feelings.append(int(i[1]) * 1.0)
             feeling = int(i[1])
-            faces[math.ceil(feeling / 20 - 1)] += 1
+            faces[math.ceil(feeling / 2) - 1] += 1
             total += feeling
         average = total / len(days)
 

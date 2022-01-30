@@ -1,6 +1,7 @@
 import os
 import csv
 import random as rand
+import json
 import feelings
 
 from flask import Flask, jsonify
@@ -10,6 +11,8 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
+
+#app.config["CORS_HEADERS"] = "Content-Type"
 
 
 temp = []
@@ -29,11 +32,13 @@ except:
 def data():
     if request.method == "POST":
         # get data from post request
-        data = request.form.to_dict(flat=False)
+        data = request.json
 
         # parse data into integers
-        x = int(data["data1"][0])
-        y = int(data["data2"][0])
+
+        x = int(data["x"])
+
+        y = int(data["y"])
         length = 0
 
         # pop until only 30 data points
@@ -55,13 +60,17 @@ def data():
 
             pass
         results = feelings.findSlope()
+        response = Flask.jsonify(
+            {
+                "slope": results[0],
+                "message1": results[1],
+                "message2": results[2],
+                "dataList": temp,
+            }
+        )
+        response.headers.add("Access-Control-Allow-Origin", "*")
 
-    return {
-        "slope": results[0],
-        "message1": results[1],
-        "message2": results[2],
-        "dataList": temp,
-    }
+    return response
 
 
 if __name__ == "__main__":

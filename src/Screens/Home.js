@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     XAxis,
     YAxis,
@@ -14,17 +14,8 @@ const rootUrl = "http://localhost:5000/"
 
 const Home = (props) => {
 
-    useEffect(()=>{
-        inputData(1,1)
-        console.log("sent")
-    },[])
-
-    async function inputData(x, y) {
-        axios.post(rootUrl + "main", { x: x, y: y }).then(() => {
-            console.log("scs")
-        }).catch((e) => { console.log(e) })
-    }
-
+    const [x, setName] = useState("");
+    const [y, setName2] = useState("");
     const [graphComponent, setGraphComponent] = useState()
     const tempArr = [{
         name: "1",
@@ -107,26 +98,70 @@ const Home = (props) => {
 
                 <div className="h-full w-1/4 bg-white rounded-lg shadow-lg p-2 flex flex-col">
 
-                    <label for="customRange1" class="form-label">Rate your mental </label>
-                    <input
+                    <label for="customRange1" class="form-label">Enter the day number</label>
+
+                    {/* <input
                         type="range"
                         className=" form-range appearance-none w-full h-6 p-0 bg-transparent focus:outline-none focus:ring-0 focus:shadow-none "
                         min="-2"
                         max="2"
                         id="customRange1"
                     />
-                    <label for="customRange1" class="form-label">Example range 2</label>
+                    
                     <input
                         type="range"
                         className="form-range appearance-none w-full h-6 p-0 bg-transparent focus:outline-none focus:ring-0 focus:shadow-none "
                         min="-10"
                         max="2"
                         id="customRange2"
+                    /> */}
+
+                    <br></br>
+                    <input
+
+                        type="text"
+                        placeholder='Enter here'
+                        value={x}
+                        onChange={(e) => setName(e.target.value)}
                     />
+
+                    <br></br>
+                    <label for="customRange1" class="form-label">Enter your happiness on a scale of 1 to 10</label>
+                    <br></br>
+                    <input
+
+                        id="happinessField"
+                        type="text"
+                        placeholder='Enter here'
+                        value={y}
+                        onChange={(e) => setName2(e.target.value)}
+                    />
+                    <br></br>
+
+                    <button
+                        type="submit"
+                        value="Add Todo"
+                        onClick={async () => {
+                            const todo = { "x": x, "y": y };
+                            const response = await fetch(rootUrl + "main", {
+                                method: "POST",
+
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(todo)
+                            })
+                            if (response.ok) {
+                                console.log("it worked")
+                                console.log(response.json())
+                            }
+                        }}> Submit
+                    </button>
+                    <div className="font-bold text-xl text-blue-600"></div>
 
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 
