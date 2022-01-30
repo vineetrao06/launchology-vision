@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
     XAxis,
     YAxis,
@@ -7,8 +7,23 @@ import {
     Area,
     ResponsiveContainer,
 } from "recharts"
+import axios from 'axios';
+//backend url
+const rootUrl = "http://localhost:5000/"
+
 
 const Home = (props) => {
+
+    useEffect(()=>{
+        inputData(1,1)
+        console.log("sent")
+    },[])
+
+    async function inputData(x, y) {
+        axios.post(rootUrl + "main", { x: x, y: y }).then(() => {
+            console.log("scs")
+        }).catch((e) => { console.log(e) })
+    }
 
     const [graphComponent, setGraphComponent] = useState()
     const tempArr = [{
@@ -55,8 +70,9 @@ const Home = (props) => {
             <div style={{ height: 450 }} className="w-full flex flex-row gap-x-2">
                 <div className="h-full w-3/4 bg-white rounded-lg shadow-lg p-2 flex flex-col">
                     <div className='text-xl font-bold w-100 pb-2 text-center'>Today: Happy</div>
-                    <div className ="h-full w-full">
-                        <ResponsiveContainer className ='h-52'>
+                    <div className="h-full w-full">
+                        {graphComponent}
+                        <ResponsiveContainer className='h-52'>
                             <AreaChart
                                 width={205}
                                 height={110}
@@ -66,20 +82,20 @@ const Home = (props) => {
                             >
                                 <defs>
                                     <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="0%" stopColor="#22c55e" stopOpacity={0.9}/>
-                                        <stop offset="100%" stopColor="#d4ffe4" stopOpacity={0.9}/>
+                                        <stop offset="0%" stopColor="#22c55e" stopOpacity={0.9} />
+                                        <stop offset="100%" stopColor="#d4ffe4" stopOpacity={0.9} />
                                     </linearGradient>
                                 </defs>
                                 <YAxis
                                     type="number"
                                     hide
                                 />
-                                <XAxis hide/>
+                                <XAxis hide />
                                 <Tooltip labelFormatter={(index) => tempArr[index].name} />
                                 <Area
                                     dataKey="price"
                                     stroke="#22c55e"
-                                    fill ="url(#colorUv)"
+                                    fill="url(#colorUv)"
                                     dot={false}
                                     nameKey="date"
                                     type="monotone"
