@@ -13,6 +13,16 @@ CORS(app)
 
 
 temp = []
+try:
+
+    with open("feelings.csv", "r") as file:
+        reader = csv.reader(file)
+        for row in list(reader):
+            temp.append(row)
+
+except:
+
+    pass
 
 
 @app.route("/main", methods=["POST"])
@@ -46,10 +56,16 @@ def data():
             pass
         results = feelings.findSlope()
 
-    return '{"slope": results[0], "message1": results[1], "message2": results[2], "dataList": temp}'
+    return {
+        "slope": results[0],
+        "message1": results[1],
+        "message2": results[2],
+        "dataList": temp,
+    }
 
 
 if __name__ == "__main__":
+
     app.run(debug=True)
 
 # adds new data

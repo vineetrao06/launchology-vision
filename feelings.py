@@ -17,10 +17,11 @@ def findSlope():
     feelings = []
     message1 = ""
     message2 = ""
+    message3 = ""
 
     faces = [0, 0, 0, 0, 0]
     total = 0
-    with open(r"input.csv", "r") as file:
+    with open(r"feelings.csv", "r") as file:
         reader = csv.reader(file)
         for i in reader:
             days.append(int(i[0]) * 1.0)
@@ -39,49 +40,50 @@ def findSlope():
         formatted_slope = "{:.2f}".format(slope * -1)
     else:
         formatted_slope = "{:.2f}".format(slope)
-    # slope is (yf-yo)/(xf-xo)
-
-    print(
-        "Your average happiness over the past {} days has been {}.".format(
-            len(days), average
-        )
-    )
-    if slope > 0:
+        # slope is (yf-yo)/(xf-xo)
 
         message1 = (
+            "Your average happiness over the past "
+            + str(len(days))
+            + " days has been "
+            + str(average)
+            + "."
+        )
+
+    if slope > 0:
+
+        message2 = (
             "You've gotten happier by about " + formatted_slope + " over the past ",
-            len(days) + " days. Keep it up!",
+            str(len(days)) + " days. Keep it up!",
         )
 
     elif slope < 0:
 
-        message1 = (
+        message2 = (
             "You've gotten sadder by about "
             + formatted_slope
             + " over the past "
-            + len(days)
+            + str(len(days))
             + " days."
         )
 
         if average < 0:
-            message = "Try identifying and eliminating sources of stress or reaching out to friends and family"
-
             rand = random.randint(0, 30000)
             if rand == 0:
-                message1 = "https://www.youtube.com/watch?v=l60MnDJklnM"
+                message3 = "https://www.youtube.com/watch?v=l60MnDJklnM"
             elif rand == 1:
-                message2 = "https://media.discordapp.net/attachments/937017934948212809/937227444656685096/unknown.png?width=476&height=604"
+                message3 = "https://media.discordapp.net/attachments/937017934948212809/937227444656685096/unknown.png?width=476&height=604"
 
             elif rand == 2:
-                message2 = "https://www.theonion.com/how-to-manage-depression-with-tv-and-alcohol-1826797374"
+                message3 = "https://www.theonion.com/how-to-manage-depression-with-tv-and-alcohol-1826797374"
 
             elif rand < 10000:
-                message2 = "Try moving around! You could do yoga, a light workout, or even go on a walk to release endorphins and get your mind off things."
+                message3 = "Try moving around! You could do yoga, a light workout, or even go on a walk to release endorphins and get your mind off things."
             elif rand < 20000:
-                message2 = "Try going outside! Sunlight helps increase serotonin levels and boosts your vitamin D levels. Fresh air is nice too!"
+                message3 = "Try going outside! Sunlight helps increase serotonin levels and boosts your vitamin D levels. Fresh air is nice too!"
 
             else:
-                message2 = "Try reaching out to friends or family! Maybe even reconnect with an old friend you haven't spoken to in a while."
+                message3 = "Try reaching out to friends or family! Maybe even reconnect with an old friend you haven't spoken to in a while."
 
     else:
         message1 = "Your happiness has stayed about the same."
