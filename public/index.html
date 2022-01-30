@@ -7,8 +7,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Emotional Sentiments</title>
   <link rel="stylesheet" href="../src/index.css">
-  <!-- <style>
-  </style> -->
+  <style>
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 10px;
+      background-color: #22c55e;
+      overflow: visible;
+      cursor: pointer;
+    }
+
+    input[type=range]::-webkit-slider-runnable-track {
+      background-color: rgb(226, 226, 226);
+      border-radius: 20px;
+      border: solid 1px rgb(152, 209, 152);
+    }
+    #root{
+      overflow-y: hidden;
+    }
+  </style>
 </head>
 
 <body>

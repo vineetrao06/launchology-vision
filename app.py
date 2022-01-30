@@ -21,11 +21,19 @@ def data():
         # parse data into integers
         x = int(data["data1"][0])
         y = int(data["data2"][0])
+        length = 0
 
         # append to csv
-        with open("feelings.csv", "w") as file:
-            writer = csv.writer(file)
-            writer.writerow((x, y))
+        try:
+            
+            with open("feelings.csv", "a") as file:
+
+                writer = csv.writer(file)
+                writer.writerow([x, y])
+
+        except:
+
+            pass
 
     return "success"
 
