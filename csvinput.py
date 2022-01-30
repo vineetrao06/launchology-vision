@@ -16,6 +16,7 @@ try:
     os.remove(r"input.csv")
 except:
     pass
+
 for i in prev:
     temp = (i[0], i[1])
     inputXY.append(temp)

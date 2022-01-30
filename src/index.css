@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    margin: 10px;
+    margin-right: 70px;
+}
+
+/* input {
+    text-align: center;
+} */
