@@ -67,7 +67,7 @@ const Home = (props) => {
                                 <defs>
                                     <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
                                         <stop offset="0%" stopColor="#22c55e" stopOpacity={0.9}/>
-                                        <stop offset="100%" stopColor="#90f5b5" stopOpacity={1}/>
+                                        <stop offset="100%" stopColor="#d4ffe4" stopOpacity={0.9}/>
                                     </linearGradient>
                                 </defs>
                                 <YAxis
