@@ -8,6 +8,7 @@ import {
     ResponsiveContainer,
 } from "recharts"
 import axios from 'axios';
+import { getDefaultNormalizer } from '@testing-library/react';
 //backend url
 const rootUrl = "http://localhost:5000/"
 
@@ -17,50 +18,64 @@ const Home = (props) => {
     const [x, setName] = useState("");
     const [y, setName2] = useState("");
     const [graphComponent, setGraphComponent] = useState()
-    const tempArr = [{
-        name: "1",
-        price: 55,
+
+
+
+
+
+    var values = [{
+        day: "1",
+        feeling: 3,
     }, {
-        name: "2",
-        price: 80,
+        day: "2",
+        feeling: 8,
     }, {
-        name: "3",
-        price: 25,
+        day: "3",
+        feeling: 6,
     }, {
-        name: "4",
-        price: 100,
+        day: "4",
+        feeling: 7,
     }, {
-        name: "5",
-        price: 50,
+        day: "5",
+        feeling: 4,
     }, {
-        name: "6",
-        price: 75,
+        day: "6",
+        feeling: 2,
+    }, {
+        day: "7",
+        feeling: 5,
+    }, {
+        day: "6",
+        feeling: 10,
     }]
 
+
+
+
     return (
-        <div className="bg-gray-100 h-screen w-full flex flex-col p-2">
+        <div className="bg-white h-screen w-full flex flex-col p-2">
             <div className="font-bold text-2xl text-green-700">Nice</div>
             <div className="h-52 w-100 flex flex-row items-center py-2 justify-center gap-x-2">
                 <div className="w-1/4 h-full bg-white rounded-lg p-2 shadow-md flex flex-col items-center justify-evenly">
                     <div className="font-bold text-xl text-green-600">Days Happy</div>
-                    <div style={{ fontSize: 100 }} className='text-green-600' >45</div>
+                    <div id="daysHappy" style={{ fontSize: 100 }} className='text-green-600' ></div>
                 </div>
                 <div className="w-1/4 h-full bg-white rounded-lg p-2 shadow-md flex flex-col items-center justify-evenly">
-                    <div className="font-bold text-xl">Days Slighty Happy</div>
-                    <div style={{ fontSize: 100 }}>22</div>
+                    <div className="font-bold text-xl text-black">Days Slighty Happy</div>
+                    <div id="daysSlightlyHappy" style={{ fontSize: 100 }}></div>
                 </div>
                 <div className="w-1/4 h-full bg-white rounded-lg p-2 shadow-md flex flex-col items-center justify-evenly">
                     <div className="font-bold text-xl text-blue-600">Days Neutral</div>
-                    <div style={{ fontSize: 100 }} className='text-blue-600' >10</div>
+                    <div id="daysNeutral" style={{ fontSize: 100 }} className='text-blue-600' ></div>
                 </div>
-                <div className="w-1/4 h-full bg-white rounded-lg p-2 shadow-md flex flex-col items-center justify-evenly">
+                <div className="w-1/4 h-full bg-white p-2 shadow-md flex flex-col items-center justify-evenly">
                     <div className="font-bold text-xl text-red-600">Days Sad</div>
-                    <div style={{ fontSize: 100 }} className='text-red-600' >1e20</div>
+                    <div id="daysSad" style={{ fontSize: 100 }} className='text-red-600' ></div>
                 </div>
             </div>
             <div style={{ height: 450 }} className="w-full flex flex-row gap-x-2">
                 <div className="h-full w-3/4 bg-white rounded-lg shadow-lg p-2 flex flex-col">
-                    <div className='text-xl font-bold w-100 pb-2 text-center'>Today: Happy</div>
+                    <div id="todayFeeling" className='text-xl font-bold w-100 pb-2 text-center'>Today: Happy</div>
                     <div className="h-full w-full">
                         {graphComponent}
                         <ResponsiveContainer className='h-52'>
@@ -68,7 +83,7 @@ const Home = (props) => {
                                 width={205}
                                 height={110}
                                 className="w-100 h-100"
-                                data={tempArr}
+                                data={values}
                                 fill="#8884d8"
                             >
                                 <defs>
@@ -78,20 +93,21 @@ const Home = (props) => {
                                     </linearGradient>
                                 </defs>
                                 <YAxis
-                                    type="number"
-                                    hide
+                                    type="feeling"
+
                                 />
-                                <XAxis hide />
-                                <Tooltip labelFormatter={(index) => tempArr[index].name} />
+                                <XAxis />
+                                {/* <Tooltip labelFormatter={(index) => values[index].name} /> */}
                                 <Area
-                                    dataKey="price"
+                                    dataKey="day"
                                     stroke="#22c55e"
-                                    fill="url(#colorUv)"
-                                    dot={false}
-                                    nameKey="date"
+                                    fill="#8884d8"
+                                    dot={true}
+                                    nameKey="Feeling"
                                     type="monotone"
                                 />
                             </AreaChart>
+
                         </ResponsiveContainer>
                     </div>
                 </div>
@@ -139,9 +155,23 @@ const Home = (props) => {
                     <br></br>
 
                     <button
+                        className='w-50 h-10 rounded-full bg-[#647a9e]'
                         type="submit"
                         value="Add Todo"
                         onClick={async () => {
+                            if (y < 4) {
+                                var newText = "Today: Sad"
+                            }
+                            else if (y < 6) {
+                                var newText = "Today: Neutral"
+                            }
+                            else if (y < 8) {
+                                var newText = "Today: Slightly Happy"
+                            }
+                            else if (y < 4) {
+                                var newText = "Today: Happy"
+                            }
+                            document.getElementById("todayFeeling").innerHTML = newText;
                             const todo = { "x": x, "y": y };
                             const response = await fetch(rootUrl + "main", {
                                 method: "POST",
@@ -152,12 +182,33 @@ const Home = (props) => {
                                 body: JSON.stringify(todo)
                             })
                             if (response.ok) {
-                                console.log("it worked")
-                                console.log(response.json())
+                                // console.log("it worked")
+                                response.json().then(data => {
+                                    document.getElementById("data1").innerHTML = data["message1"]
+                                    document.getElementById("data2").innerHTML = data["message2"]
+                                    document.getElementById("data3").innerHTML = data["message3"]
+                                    document.getElementById("daysHappy").innerHTML = data["happyDays"]
+                                    document.getElementById("daysSlightlyHappy").innerHTML = data["slightlyHappyDays"]
+                                    document.getElementById("daysNeutral").innerHTML = data["neutralDays"]
+                                    document.getElementById("daysSad").innerHTML = data["sadDays"]
+
+
+
+                                });
+
                             }
                         }}> Submit
                     </button>
+
                     <div className="font-bold text-xl text-blue-600"></div>
+
+                    <br></br>
+
+                    <div id="data1" style={{ fontSize: 15 }} className="font-bold text-xl"></div>
+
+                    <div id="data2" style={{ fontSize: 12.5 }} className="font-bold text-xl"></div>
+                    <div id="data3" style={{ fontSize: 12.5 }} className="font-bold text-xl"></div>
+                    {/* <div style={{ fontSize: 100 }}>22</div> */}
 
                 </div>
             </div>

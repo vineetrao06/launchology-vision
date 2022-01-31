@@ -12,13 +12,13 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-#app.config["CORS_HEADERS"] = "Content-Type"
+app.config["CORS_HEADERS"] = "Content-Type"
 
 
 temp = []
 try:
 
-    with open("feelings.csv", "r") as file:
+    with open("feelings.csv", "r+") as file:
         reader = csv.reader(file)
         for row in list(reader):
             temp.append(row)
@@ -28,7 +28,7 @@ except:
     pass
 
 
-@app.route("/main", methods=["POST"])
+@app.route("/main", methods=["POST", "GET"])
 def data():
     if request.method == "POST":
         # get data from post request
@@ -60,15 +60,64 @@ def data():
 
             pass
         results = feelings.findSlope()
-        response = Flask.jsonify(
+        sadDays = 0
+        neutralDays = 0
+        slightlyHappyDays = 0
+        happyDays = 0
+        for i in range(0, len(temp)):
+            if int(temp[i][1]) < 4:
+                sadDays += 1
+            elif int(temp[i][1]) < 6:
+                neutralDays += 1
+            elif int(temp[i][1]) < 8:
+                slightlyHappyDays += 1
+            elif int(temp[i][1]) <= 10:
+                happyDays += 1
+
+        response = jsonify(
             {
                 "slope": results[0],
                 "message1": results[1],
                 "message2": results[2],
+                "message3": results[3],
                 "dataList": temp,
+                "sadDays": str(sadDays),
+                "happyDays": str(happyDays),
+                "neutralDays": str(neutralDays),
+                "slightlyHappyDays": str(slightlyHappyDays),
             }
         )
+
         response.headers.add("Access-Control-Allow-Origin", "*")
+    if request.method == "GET":
+        results = feelings.findSlope()
+        sadDays = 0
+        neutralDays = 0
+        slightlyHappyDays = 0
+        happyDays = 0
+        for i in range(0, len(temp)):
+            if int(temp[i][1]) < 4:
+                sadDays += 1
+            elif int(temp[i][1]) < 6:
+                neutralDays += 1
+            elif int(temp[i][1]) < 8:
+                slightlyHappyDays += 1
+            elif int(temp[i][1]) < 10:
+                happyDays += 1
+
+        response = jsonify(
+            {
+                "slope": results[0],
+                "message1": results[1],
+                "message2": results[2],
+                "message3": results[3],
+                "dataList": temp,
+                "sadDays": str(sadDays),
+                "happyDays": str(happyDays),
+                "neutralDays": str(neutralDays),
+                "slightlyHappyDays": str(slightlyHappyDays),
+            }
+        )
 
     return response
 

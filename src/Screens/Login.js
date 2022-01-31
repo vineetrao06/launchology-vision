@@ -50,13 +50,13 @@ const Login = () => {
             </div>
             {errorMessage}
             <div>
-              <button className="transition group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 duration-300 ease-in-out"
+              <button className="bg-indigo-500 transition group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-black bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 duration-300 ease-in-out"
                 onClick={() => {
 
                   let email = document.getElementById("email-address").value
                   let password = document.getElementById("password").value
 
-                  if(!email || !password){
+                  if (!email || !password) {
                     setErrorMessage(<div className="flex items-center justify-center text-red-500">Fill all boxes</div>)
                     return
                   }
